@@ -1,0 +1,654 @@
+//KERBOUCHE RABAIE
+//TOUMI YOUCEF
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+enum Specialty {Cardiology,Dermatology,Nephrology,Neurology,Ophthalmology,Orthopedics,Otolaryngology,Pediatrics,Psychiatry,Surgery};
+struct PatientList {
+    int id;
+    char name[20];
+    int age;
+    char gendre[10];
+    float height;
+    struct PatientList* next;
+};
+
+typedef struct PatientList PatientList;
+
+struct doctorList {
+    int DoctorID;
+    char Name[20];
+    enum Specialty s;
+    struct doctorList* next;
+};
+
+typedef struct doctorList doctorList;
+
+struct diagnosticList {
+    int PatientID;
+    int DoctorID;
+    char Diagnosis[20];
+    struct date {
+        int day;
+        int month;
+        int year;
+    } DiagDate, NextAppointment;
+    struct diagnosticList* next;
+};
+
+typedef struct diagnosticList diagnosticList;
+///for  choosing
+void choice() {
+    printf("        WELCOME TO OUR HOSPITAL\n\n");
+    printf("1: for patient 😷\n");
+    printf("2: for doctor\n");
+    printf("3: for diagnostic ✍️\n");
+    printf("0: for exit 👋\n");
+    printf("Enter your choice: \n");
+}
+///for patient chosing
+void patientChoice() {
+    printf("1: for add patient\n");
+    printf("2: for delete patient\n");
+    printf("3: for update patient\n");
+    printf("4: for search patient\n");
+    printf("5: for print patient\n");
+    printf("6: return to main menu\n");
+    printf("Enter your choice: \n");
+}
+///for doctor chosing
+void doctorChoice() {
+    printf("1: for add doctor\n");
+    printf("2: for delete doctor\n");
+    printf("3: for update doctor\n");
+    printf("4: for search doctor\n");
+    printf("5: for print doctor\n");
+    printf("6: for doctor's diagnosis\n"); 
+    printf("7: return to main menu\n");
+    printf("Enter your choice: \n");
+    
+}
+///for diagnostic chosing
+void diagnosticChoice() {
+    printf("1: for add diagnostic\n");
+    printf("2: for delete diagnostic\n");
+    printf("3: for update diagnostic\n");
+    printf("4: for search diagnostic\n");
+    printf("5: for print diagnostic\n");
+    printf("6: return to main menu\n");
+    printf("Enter your choice: \n");
+}
+///for add patient
+void addPatient(PatientList** head) {
+    PatientList* q = *head;
+    PatientList* newPatient;
+    newPatient = (PatientList*)malloc(sizeof(PatientList));
+    printf("Enter patient ID: \n");
+    scanf("%i", &newPatient->id);
+    printf("Enter patient name: \n");
+    scanf("%s", newPatient->name);
+    printf("Enter patient age: \n");
+    scanf("%i", &newPatient->age);
+    printf("Enter patient gender: \n");
+    scanf("%s", newPatient->gendre);
+    printf("Enter patient height: \n");
+    scanf("%f", &newPatient->height);
+    newPatient->next = NULL;
+    if (*head == NULL) {
+        *head = newPatient;
+        printf("\n\nPatient added successfully\n\n");
+        return;
+    }
+    else {
+        while (q->next != NULL) {
+            q = q->next;
+        }
+        q->next = newPatient;
+        printf("Patient added successfully\n");
+    }
+}
+///for add doctor 
+void addDoctor(doctorList** head) {
+    doctorList* q = *head;
+    doctorList* newDoctor;
+    newDoctor = (doctorList*)malloc(sizeof(doctorList));
+    printf("Enter doctor ID: \n");
+    scanf("%i", &newDoctor->DoctorID);
+    printf("Enter doctor name: \n");
+    scanf("%s", newDoctor->Name);
+    printf("Enter doctor specialization: \n");
+    printf("1: for Cardiology\n");
+    printf("2: for Dermatology\n");
+    printf("3: for Nephrology\n");
+    printf("4: for Neurology\n");
+    printf("5: for Ophthalmology\n");
+    printf("6: for Orthopedics\n");
+    printf("7: for Otolaryngology\n");
+    printf("8: for Pediatrics\n");
+    printf("9: for Psychiatry\n");
+    printf("10: for Surgery\n");
+    scanf("%i", &newDoctor->s);
+    newDoctor->next = NULL;
+    if (*head == NULL) {
+        *head = newDoctor;
+        printf("\n\nDoctor added successfully\n\n");
+        return;
+    }
+    else {
+        while (q->next != NULL) {
+            q = q->next;
+        }
+        q->next = newDoctor;
+        printf("Doctor added successfully\n");
+    }
+}
+///for add diagnostic
+void Adddiagnostic(diagnosticList** head) {
+    diagnosticList* q = *head;
+    diagnosticList* newdiagnostic;
+    newdiagnostic = (diagnosticList*)malloc(sizeof(diagnosticList));
+    printf("Enter patient ID for diagnostic: \n");
+    scanf("%i", &newdiagnostic->PatientID);
+    printf ("give me the doctor ID for diagnostic: \n");
+    scanf("%i", &newdiagnostic->DoctorID);
+    printf("Enter diagnosis: \n");
+    scanf("%s", newdiagnostic->Diagnosis);
+    printf("Enter diagnostic date (day month year): \n");
+    scanf("%i %i %i", &newdiagnostic->DiagDate.day, &newdiagnostic->DiagDate.month, &newdiagnostic->DiagDate.year);
+
+printf("Enter next");
+    
+ printf("appointment date (day month year): \n");
+    scanf("%i %i %i", &newdiagnostic->NextAppointment.day, &newdiagnostic->NextAppointment.month, &newdiagnostic->NextAppointment.year);
+    newdiagnostic->next = NULL;
+    if (*head == NULL) {
+        *head = newdiagnostic;
+        printf("\n\nDiagnostic added successfully\n\n");
+        return;
+    }
+    else {
+        while (q->next != NULL) {
+            q = q->next;
+        }
+        q->next = newdiagnostic;
+        printf("Diagnostic added successfully\n");
+    }
+}
+///for print patient
+void printPatient(PatientList* head) {
+    PatientList* p = head;
+    if (p == NULL) {
+        printf("The list is empty\n");
+    }
+    else {
+        while (p != NULL) {
+            printf("\n\nID: %i\n", p->id);
+            printf("Name: %s\n", p->name);
+            printf("Age: %i\n", p->age);
+            printf("Gender: %s\n", p->gendre);
+            printf("Height: %.2f\n", p->height);
+            p = p->next;
+        }
+        printf("____\n\nThis is the patient information\n\n");
+    }
+}
+///for print doctor
+void printDoctor(doctorList* head) {
+    doctorList* p = head;
+    if (p == NULL) {
+        printf("The list is empty\n");
+    }
+    else {
+        while (p != NULL) {
+            const char* specialty_str; 
+            switch (p->s) { 
+                case Cardiology: 
+                    specialty_str = "Cardiology"; 
+                    break; 
+                case Dermatology: 
+                    specialty_str = "Dermatology"; 
+                    break; 
+                case Nephrology: 
+                    specialty_str = "Nephrology"; 
+                    break; 
+                case Neurology: 
+                    specialty_str = "Neurology"; 
+                    break; 
+                case Ophthalmology: 
+                    specialty_str = "Ophthalmology"; 
+                    break; 
+                case Orthopedics: 
+                    specialty_str = "Orthopedics"; 
+                    break; 
+                case Otolaryngology: 
+                    specialty_str = "Otolaryngology"; 
+                    break; 
+                case Pediatrics: 
+                    specialty_str = "Pediatrics"; 
+                    break; 
+                case Psychiatry: 
+                    specialty_str = "Psychiatry"; 
+                    break; 
+                case Surgery: 
+                    specialty_str = "Surgery"; 
+                    break; 
+                default: 
+                    specialty_str = "Unknown"; 
+                    break; 
+            }
+            printf("\n\nDoctor ID: %i\n", p->DoctorID);
+            printf("Name: %s\n", p->Name);
+            printf("Specialty: %s\n", specialty_str);
+            p = p->next;
+           
+            
+           
+        }
+        printf("____\n\nThis is the doctor information\n\n");
+    }
+}
+///for print diagnostic
+void printDiagnostic(diagnosticList* head) {
+    diagnosticList* p = head;
+    if (p == NULL) {
+        printf("The list is empty\n");
+    }
+    else {
+        while (p != NULL) {
+            printf("\n\nPatient ID: %i\n", p->PatientID);
+            printf("Diagnosis: %s\n", p->Diagnosis);
+            printf("DiagDate: %i/%i/%i\n", p->DiagDate.day, p->DiagDate.month, p->DiagDate.year);
+            printf("NextAppointment: %i/%i/%i\n", p->NextAppointment.day, p->NextAppointment.month, p->NextAppointment.year);
+            p = p->next;
+        }
+        printf("____\n\nThis is the diagnostic information\n\n");
+    }
+}
+///for search patient
+PatientList* searchPatient(PatientList* head, int id) {
+    PatientList* p = head;
+    while (p != NULL) {
+        if (p->id == id) {
+            printf("\n\nID: %i\n", p->id);
+            printf("Name: %s\n", p->name);
+            printf("Age: %i\n", p->age);
+            printf("Gender: %s\n", p->gendre);
+            printf("Height: %.2f\n", p->height);
+            printf ("\n\nThis is the patient information\n\n");
+
+            return p;
+        }
+        p = p->next;
+    }
+    printf("Patient with ID %d not found\n", id);
+    return NULL;
+}
+///for search doctor
+doctorList* searchDoctor(doctorList* head, int id) {
+    doctorList* p = head;
+    while (p != NULL) {
+        if (p->DoctorID == id) {
+            while (p != NULL) {
+                const char* specialty_str; 
+                switch (p->s) { 
+                    case Cardiology: 
+                        specialty_str = "Cardiology"; 
+                        break; 
+                    case Dermatology: 
+                        specialty_str = "Dermatology"; 
+                        break; 
+                    case Nephrology: 
+                        specialty_str = "Nephrology"; 
+                        break; 
+                    case Neurology: 
+                        specialty_str = "Neurology"; 
+                        break; 
+                    case Ophthalmology: 
+                        specialty_str = "Ophthalmology"; 
+                        break; 
+                    case Orthopedics: 
+                        specialty_str = "Orthopedics"; 
+                        break; 
+                    case Otolaryngology: 
+                        specialty_str = "Otolaryngology"; 
+                        break; 
+                    case Pediatrics: 
+                        specialty_str = "Pediatrics"; 
+                        break; 
+                    case Psychiatry: 
+                        specialty_str = "Psychiatry"; 
+                        break; 
+                    case Surgery: 
+                        specialty_str = "Surgery"; 
+                        break; 
+                    default: 
+                        specialty_str = "Unknown"; 
+                        break; 
+                }
+                printf("\n\nDoctor ID: %i\n", p->DoctorID);
+                printf("Name: %s\n", p->Name);
+                printf("Specialty: %s\n", specialty_str);
+            return p;
+        }
+        p = p->next;
+    }
+    printf("Doctor with ID %d not found\n", id);
+    return NULL;
+}}
+///for search diagnostic
+diagnosticList* searchDiagnostic(diagnosticList* head, int id) {
+    diagnosticList* p = head;
+    while (p != NULL) {
+        if (p->PatientID == id) {
+            printf("\n\nPatient ID: %i\n", p->PatientID);
+            printf("Diagnosis: %s\n", p->Diagnosis);
+            printf("DiagDate: %i/%i/%i\n", p->DiagDate.day, p->DiagDate.month, p->DiagDate.year);
+            printf("NextAppointment: %i/%i/%i\n", p->NextAppointment.day, p->NextAppointment.month, p->NextAppointment.year);
+            printf ("\n\nThis is the diagnostic information\n\n");
+                
+           
+            return p;
+        }
+        p = p->next;
+    }
+    printf("Diagnostic with Patient ID %d not found\n", id);
+    return NULL;
+}
+///for delete patient
+PatientList* deletePatient(PatientList** head, int id) {
+    PatientList* p = *head;
+    PatientList* prev = NULL;
+    
+    if (p == NULL) {
+
+
+printf("The list is empty\n");
+        return NULL;
+    }
+    if (p->id == id) {
+        *head = p->next;
+        free(p);
+        printf("Patient with ID %d is deleted\n", id);
+        return *head;
+    }
+    while (p != NULL && p->id != id) {
+        prev = p;
+        p = p->next;
+    }
+    if (p == NULL) {
+        printf("Patient with ID %d not found\n", id);
+        return *head;
+    }
+    prev->next = p->next;
+    free(p);
+    printf("Patient with ID %d is deleted\n", id);
+    return *head;
+}
+///for delete doctor
+doctorList* deleteDoctor(doctorList** head, int id) {
+    doctorList* p = *head;
+    doctorList* prev = NULL;
+
+    if (p == NULL) {
+        printf("The list is empty\n");
+        return NULL;
+    }
+
+
+    if (p->DoctorID == id) {
+        *head = p->next;
+        free(p);
+        printf("Doctor with ID %d is deleted\n", id);
+        return *head;
+    }
+    while (p != NULL && p->DoctorID != id) {
+        prev = p;
+        p = p->next;
+    }
+    if (p == NULL) {
+        printf("Doctor with ID %d not found\n", id);
+        return *head;
+    }
+    prev->next = p->next;
+    free(p);
+    printf("Doctor with ID %d is deleted\n", id);
+    return *head;
+}
+///for delete diagnostic
+diagnosticList* deleteDiagnostic(diagnosticList** head, int id) {
+    diagnosticList* p = *head;
+    diagnosticList* prev = NULL;
+
+    if (p == NULL) {
+        printf("The list is empty\n");
+        return NULL;
+    }
+    if (p->PatientID == id) {
+        *head = p->next;
+        free(p);
+        printf("Diagnostic with Patient ID %d is deleted\n", id);
+        return *head;
+    }
+    while (p != NULL && p->PatientID != id) {
+        prev = p;
+        p = p->next;
+    }
+    if (p == NULL) {
+        printf("Diagnostic with Patient ID %d not found\n", id);
+        return *head;
+    }
+    prev->next = p->next;
+    free(p);
+    printf("Diagnostic with Patient ID %d is deleted\n", id);
+    return *head;
+}
+///for update patient
+void updatePatient(PatientList* head, int id) {
+    PatientList* p = head;
+
+    while (p != NULL) {
+        if (p->id == id) {
+            printf("Enter updated ID: \n");
+            scanf("%i", &p->id);
+            printf("Enter updated name: \n");
+            scanf("%s", p->name);
+            printf("Enter updated age: \n");
+            scanf("%i", &p->age);
+            printf("Enter updated gender: \n");
+            scanf("%s", p->gendre);
+            printf("Enter updated height: \n");
+            scanf("%f", &p->height);
+        }
+        p = p->next;
+    }
+    printf("Patient with ID %d is updated\n", id);
+}
+///for update doctor
+void updateDoctor(doctorList* head, int id) {
+    doctorList* p = head;
+
+    while (p != NULL) {
+        if (p->DoctorID == id) {
+            printf("Enter updated ID: \n");
+            scanf("%i", &p->DoctorID);
+            printf("Enter updated name: \n");
+            scanf("%s", p->Name);
+            printf("Enter updated specialization: \n");
+            printf("1: for Cardiology\n");
+            printf("2: for Dermatology\n");
+            printf("3: for Nephrology\n");
+            printf("4: for Neurology\n");
+            printf("5: for Ophthalmology\n");
+            printf("6: for Orthopedics\n");
+            printf("7: for Otolaryngology\n");
+            printf("8: for Pediatrics\n");
+            printf("9: for Psychiatry\n");
+            printf("10: for Surgery\n");
+            scanf("%i", &p->s); 
+        }
+        p = p->next;
+    }
+    printf("Doctor with ID %d is updated\n", id);
+}
+///for update diagnostic
+void updateDiagnostic(diagnosticList* head, int id) {
+    diagnosticList* p = head;
+
+    while (p != NULL) {
+        if (p->PatientID == id) {
+            printf("Enter updated patient ID: \n");
+            scanf("%i", &p->PatientID);
+            printf("Enter updated diagnosis: \n");
+            scanf("%s", p->Diagnosis);
+            printf("Enter updated diagnostic date (day month year): \n");
+            scanf("%i %i %i", &p->DiagDate.day, &p->DiagDate.month, &p->DiagDate.year);
+            printf("Enter updated next appointment date (day month year): \n");
+            scanf("%i %i %i", &p->NextAppointment.day, &p->NextAppointment.month, &p->NextAppointment.year);
+        }
+        p = p->next;
+    }
+    printf("Diagnostic with Patient ID %d is updated\n", id);
+}
+///for print diastolic using doctor id
+void printDiastolicid(diagnosticList* head, int id){
+    diagnosticList* p = head;
+    while (p != NULL){
+        if (p->DoctorID == id){
+            printf("\n\nPatient ID: %i\n", p->PatientID);
+            printf("Diagnosis: %s\n", p->Diagnosis);
+            printf("DiagDate: %i/%i/%i\n", p->DiagDate.day, p->DiagDate.month, p->DiagDate.year);
+            printf("NextAppointment: %i/%i/%i\n", p->NextAppointment.day, p->NextAppointment.month, p->NextAppointment.year);
+            printf ("\n\nThis is the diagnostic information\n\n");
+            return ;
+                            
+        }
+                        p = p->next;
+                    }
+                    printf("Diagnostic with Patient ID %d not found\n", id);
+                    return;
+                }
+                
+            
+        
+            
+
+
+int main() {
+    PatientList* headPatient = NULL;
+    doctorList* headDoctor = NULL;
+    diagnosticList* headDiagnostic = NULL;
+    int choice_main, choice_patient, choice_doctor, choice_diagnostic, id_search, id_delete, id_update;
+
+
+do {
+        choice();
+        scanf("%i", &choice_main);
+        
+        switch (choice_main) {
+            case 1: // Patient
+                do {
+                    patientChoice();
+                    scanf("%i", &choice_patient);
+
+                    switch (choice_patient) {
+                        case 1: // Add patient
+                            addPatient(&headPatient);
+                            break;
+                        case 2: // Delete patient
+                            printf("Enter the ID of the patient you want to delete: \n");
+                            scanf("%i", &id_delete);
+                            deletePatient(&headPatient, id_delete);
+                            break;
+                        case 3: // Update patient
+                            printf("Enter the ID of the patient you want to update: \n");
+                            scanf("%i", &id_update);
+                            updatePatient(headPatient, id_update);
+                            break;
+                        case 4: // Search patient
+                            printf("Enter the ID of the patient you want to search: \n");
+                            scanf("%i", &id_search);
+                            searchPatient(headPatient, id_search);
+                            break;
+                        case 5: // Print patients
+                            printPatient(headPatient);
+                            break;
+                    }
+                } while (choice_patient != 6);
+                break;
+
+            case 2: // Doctor
+                do {
+                    doctorChoice();
+                    scanf("%i", &choice_doctor);
+
+                    switch (choice_doctor) {
+                        case 1: // Add doctor
+                            addDoctor(&headDoctor);
+                            break;
+                        case 2: // Delete doctor
+                            printf("Enter the ID of the doctor you want to delete: \n");
+                            scanf("%i", &id_delete);
+                            deleteDoctor(&headDoctor, id_delete);
+                            break;
+                        case 3: // Update doctor
+                            printf("Enter the ID of the doctor you want to update: \n");
+                            scanf("%i", &id_update);
+                            updateDoctor(headDoctor, id_update);
+                            break;
+                        case 4: // Search doctor
+                            printf("Enter the ID of the doctor you want to search: \n");
+                            scanf("%i", &id_search);
+
+
+                            searchDoctor(headDoctor, id_search);
+                            break;
+                        case 5: // Print doctors
+                            printDoctor(headDoctor);
+                            break;
+                        case 6:
+                         printf("give me the docor id yo want to print the diastolic:\n"); 
+                         scanf("%i",&id_search);
+                         printDiastolicid(headDiagnostic,id_search);
+                    }
+                } while (choice_doctor != 7);
+                break;
+
+            case 3: // Diagnostic
+                do {
+                    diagnosticChoice();
+                    scanf("%i", &choice_diagnostic);
+                    
+                    switch (choice_diagnostic) {
+                        case 1: // Add diagnostic
+                            Adddiagnostic(&headDiagnostic);
+                            break;
+                        case 2: // Delete diagnostic
+                            printf("Enter the Patient ID of the diagnostic you want to delete: \n");
+                            scanf("%i", &id_delete);
+                            deleteDiagnostic(&headDiagnostic, id_delete);
+                            break;
+                        case 3: // Update diagnostic
+                            printf("Enter the Patient ID of the diagnostic you want to update: \n");
+                            scanf("%i", &id_update);
+
+
+updateDiagnostic(headDiagnostic, id_update);
+                            break;
+                        case 4: // Search diagnostic
+                            printf("Enter the Patient ID of the diagnostic you want to search: \n");
+                            scanf("%i", &id_search);
+                            searchDiagnostic(headDiagnostic, id_search);
+                            break;
+                        case 5: // Print diagnostics
+                            printDiagnostic(headDiagnostic);
+                            break;
+                    }
+                } while (choice_diagnostic != 6);
+                break;
+        }
+    } while (choice_main != 0);
+
+    return 0;
+}
